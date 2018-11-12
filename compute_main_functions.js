@@ -27,35 +27,35 @@ function compute_generatePage(){
 		}
 
 		else{
-						background(0);
-						backgrounGrid();
-						highlightCurrentButton();
-						drawNavigationButtons();
-						drawGridDots(5);
-						drawComputeButton();
-						drawRefreshButton("RESTART");
+			background(0);
+			backgrounGrid();
+			highlightCurrentButton();
+			drawNavigationButtons();
+			drawGridDots(5);
+			drawComputeButton();
+			drawRefreshButton("RESTART");
 
-						for(var i=0;i<pattern_lines.length;i++){
-							push();
-							stroke(150);
-							pattern_lines[i].makeLines();
-							pop();
-						}
+			for(var i=0;i<pattern_lines.length;i++){
+				push();
+				stroke(150);
+				pattern_lines[i].makeLines();
+				pop();
+			}
 
-						for(var i=0;i<populatedPattern.length;i++){
-							var curPopulation = populatedPattern[i];
-							for(var f=0;f<curPopulation.length;f++){
-								var cUse = curPopulation[f];
-								var center = findCentroid(cUse);
-								// ellipse(center[0],center[1],2,2);
-								for(j=0;j<cUse.length-1;j++){
-									push();
-									stroke(255);
-									line(cUse[j][0],cUse[j][1],cUse[j+1][0],cUse[j+1][1]);
-									pop();
-								}
-							}
-						}
+			for(var i=0;i<populatedPattern.length;i++){
+				var curPopulation = populatedPattern[i];
+				for(var f=0;f<curPopulation.length;f++){
+					var cUse = curPopulation[f];
+					var center = findCentroid(cUse);
+					// ellipse(center[0],center[1],2,2);
+					for(j=0;j<cUse.length-1;j++){
+						push();
+						stroke(255);
+						line(cUse[j][0],cUse[j][1],cUse[j+1][0],cUse[j+1][1]);
+						pop();
+					}
+				}
+			}
 		}
 
 }
@@ -75,51 +75,50 @@ function compute_MousedPressed(){
 	//THIS IS WHERE ALL THE MAIN CALLS ARE GENERATED.
 
 				if(conflict === true){
-
-								var width = 100;
-								var height = 20;
-								if(mouseX>250-width && mouseY>250-height && mouseX<250+width*2 && mouseY<250+height*2){
-									conflict = false;
-								}
+					var width = 100;
+					var height = 20;
+					if(mouseX>250-width && mouseY>250-height && mouseX<250+width*2 && mouseY<250+height*2){
+						conflict = false;
+					}
 				}
 
 				else{
-								if(mouseX>beginButtons && mouseY>endButtons && mouseX<beginButtons+buttonWidth && mouseY<endButtons+buttonHeight){
-										try{
-												compute_scaleUseCurves();
-												background(0);
-												populatedPattern = [];
-												for(var j=0;j<pattern_lines.length;j++){
-														var curPatternName = pattern_color[j];
-														var curPattern = pattern_lines[j];
-														for(var i=0;i<allUses.length;i++){
-															var curUseName = allUsesNames[i];
-															var curUse = allUses[i];
-															if(curUse.points.length<1){
-																break;
-															}
-															else if(curUseName === curPatternName){
-																var curPopulatedPattern = arrayPattern(curUse,curPattern);
-																populatedPattern.push(curPopulatedPattern);
-															}
-														}
+					if(mouseX>beginButtons && mouseY>endButtons && mouseX<beginButtons+buttonWidth && mouseY<endButtons+buttonHeight){
+							try{
+									compute_scaleUseCurves();
+									background(0);
+									populatedPattern = [];
+									for(var j=0;j<pattern_lines.length;j++){
+											var curPatternName = pattern_color[j];
+											var curPattern = pattern_lines[j];
+											for(var i=0;i<allUses.length;i++){
+												var curUseName = allUsesNames[i];
+												var curUse = allUses[i];
+												if(curUse.points.length<1){
+													break;
 												}
-										}
-										// IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
-										catch{
-											conflict = true;
-										}
-								}
-								// IF THE USER CHOSES TO DELETE ALL PREVIOUS DATA - SET EVERYTHING BACK TO NULL
-								else if(mouseX>beginButtons+350 && mouseY>endButtons && mouseX<beginButtons+350+100 && mouseY<endButtons+30){
-										populatedPattern = [];
-										allUses = [];
-										pattern_color = [];
-										pattern_lines = [];
-										allUsesNames = [];
-										pattern_displayPoints = [];
-										useNumber = 0;
-								}
+												else if(curUseName === curPatternName){
+													var curPopulatedPattern = arrayPattern(curUse,curPattern);
+													populatedPattern.push(curPopulatedPattern);
+												}
+											}
+									}
+							}
+							// IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
+							catch{
+								conflict = true;
+							}
+					}
+					// IF THE USER CHOSES TO DELETE ALL PREVIOUS DATA - SET EVERYTHING BACK TO NULL
+					else if(mouseX>beginButtons+350 && mouseY>endButtons && mouseX<beginButtons+350+100 && mouseY<endButtons+30){
+							populatedPattern = [];
+							allUses = [];
+							pattern_color = [];
+							pattern_lines = [];
+							allUsesNames = [];
+							pattern_displayPoints = [];
+							useNumber = 0;
+					}
 				}
 }
 
