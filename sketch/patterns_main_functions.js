@@ -44,7 +44,7 @@ function patterns_generatePage(){
 			highlightCurrentButton();
 			drawNavigationButtons();
 			drawGridDots(5);
-			drawRefreshButton("REFRESH")
+			drawRefreshButton("RESTART")
 
 
 			for (z=0;z<pattern_lines.length;z++){

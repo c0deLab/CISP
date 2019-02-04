@@ -142,152 +142,172 @@ function compute_MousedPressed(){
 // COMPREHEND - IT'S ESSENTIALLY A MASSIVE NESTED FOR LOOP WITH A BUNCH OF
 //CHECKS IN THE MIDDLE AND END (CHECKS FOR INTERSECTIONS AND ADJACENCIES)
 
-function arrayPattern(use,pattern){
 
-	var usePoints = use.scaledPoints;
-	// console.log("UsePoints", usePoints);
-	var patternCenterPoints = getRelationalPoints(use,pattern);
-	// console.log("PatternCenterPoints", patternCenterPoints);
+function sortCurvesByDistance(workingCurves, patternCenterPoint){
+	var sortedCurves = []; 
 
-	centerPoints = patternCenterPoints;
-	// MOVE THE USE TO THE FIRST POINT ON THE CURVE
-	console.log("reached");
-	var useCenterPoint = findCentroid(usePoints);
-	var firstCenterPoint = patternCenterPoints[0];
+	for(var i=0; i<workingCurves.length; i++){
+	}
+}
 
-	var lastMovedCurve = moveCurve(useCenterPoint,usePoints,firstCenterPoint);
-	console.log("lastMovedCurve", lastMovedCurve);
-	// CREATE THE CONTAINER FOR THE FINAL GENERATED PATTERN
-	var arrayedCurve = [];
-	// ADD THE FIRST MOVED USE TO THE CONTAINER
-	arrayedCurve.push(lastMovedCurve);
+function swap(a, i, j){
+	var a1 = a[i];
+	var a2 = a[j]; 
+	a[i] = a2;
+	a[j] = a1;
+}
 
-		//THEN GET ALL THE ITERATIONS OF THE SUBSEQUENT USES -
-		//EACH ITERATION OF THE LOOP REPRESENTS THE OPTIMIZATION OF ONE USE -
-		// NOTICE HOW IT BEGINS AT 1 - AS THE FIRST USE HAS ALREADY BEEN PLACED BEFORE
-		// THIS MAY SEEM ARBITRARY THAT THE FIRST USE IS PLACED WITHOUT OPTIMIZATION -
-		// BUT YESSIOS OUTLINES THIS EXACT METHOD IN THE CISP PAPER
-		for(var i=1; i<patternCenterPoints.length; i++){
-			var curCenterPoint = patternCenterPoints[i];
-			var workingCurve = [];
+function selectionSort(workingCurves, point){
 
-			// FOR EACH MIRRORED ITERATION
-			for(var m = 0; m <= 4; m++){
-				var n = m%2;
-				var mirroredCurve = mirrorCurve(usePoints,n);
-				// FOR EACH ROTATED ITERATION
-				for(var l =0 ; l<=6.28319 ; l = l+1.5708){
-					var rotatedCurve = rotateCurve(mirroredCurve,l);
-					// FOR EACH POINT ON THE PREVIOUS USE TO MOVE TO
-					for(var j=0; j < arrayedCurve[arrayedCurve.length-1].length; j++){
-						var nextPointToMoveTo = arrayedCurve[arrayedCurve.length-1][j];
-						// FOR EACH POINT ON THE CURRENT USE TO MOVE FROM
-						for(var k=0;k < rotatedCurve.length ; k++){
-							var pointOnUseToMove = rotatedCurve[k];
+    for (var i=0; i<workingCurves.length; i++){
+        minIndex = i;
+        for(var j=i+1; j<a.length; j++){
 
-							// MOVE THE USE
-							var newMovedCurve = moveCurve(pointOnUseToMove,rotatedCurve,nextPointToMoveTo);
+            if (a[i] < a[minIndex]){
+                minIndex = i;
+            }
+        }
+        swap(workingCurves, startIndex, minIndex);
+    }
+}
 
-							// CHECK IF THE USE MOVED IS IN THE EXACT SAME POSITION AS THE PREVIOUS USE ON THE PATTERN CURVE
-							// THIS IS OBVIOUSLY NOT AN ACCEPTABLE SOLUTION - MOVE ON
-							if (almostEquals(newMovedCurve[0][1],arrayedCurve[arrayedCurve.length-1][0][1]) && almostEquals(newMovedCurve[0][0],arrayedCurve[arrayedCurve.length-1][0][0])){
-								continue;
-							}
-							// IF IT'S NOT THE SAME POSITION THEN CHECK IF THIS POSITION --
-							// INTERSECTS WITH ANY PREVIOUS USE AT ALL -- IF IT DOES NOT
-							// APPEND IT TO THE "WORKING CURVE" CONTAINER
-							else{
-								var intCheck = 0;
+function getWorkingCurves(arrayedCurve, prevUse, usePoints, patternCenterPoint){
 
-								for(var t=0; t<arrayedCurve.length; t++){
-									var curCurveToCheck = arrayedCurve[t];
-									var tempIntCheck = checkUseIntersection(newMovedCurve,curCurveToCheck);
+	var curCenterPoint = patternCenterPoint;
 
-									if(curCurveToCheck == newMovedCurve){
-										intCheck+=1
-									}
+	var workingCurve = [];
 
-									if(tempIntCheck===true){
-										intCheck+=1;
-									}
-								}
+	// FOR EACH ROTATED ITERATION
+	for(var l=0 ; l<=Math.PI*2; l+=Math.PI/2){
 
-								if(intCheck===0){
-									workingCurve.push(newMovedCurve);
-								}
-							}
+		var rotatedCurve = rotateCurve(usePoints,l);
+
+		// FOR EACH POINT ON THE PREVIOUS USE TO MOVE TO
+		for(var j=0; j<prevUse.length; j++){
+
+			var nextPointToMoveTo = prevUse[j];
+
+			// FOR EACH POINT ON THE CURRENT USE TO MOVE FROM
+			for(var k=0; k<rotatedCurve.length; k++){
+
+				var pointOnUseToMove = rotatedCurve[k];
+
+				// MOVE THE USE
+				var newMovedCurve = moveCurve(pointOnUseToMove,rotatedCurve,nextPointToMoveTo);
+
+				// CHECK IF THE USE MOVED IS IN THE EXACT SAME POSITION AS THE PREVIOUS USE ON THE PATTERN CURVE
+				// THIS IS OBVIOUSLY NOT AN ACCEPTABLE SOLUTION - MOVE ON
+				if (almostEquals(newMovedCurve[0][1],prevUse[j][0][1]) && almostEquals(newMovedCurve[0][0],prevUse[j][0][0])){
+					continue;
+				}
+				// IF IT'S NOT THE SAME POSITION THEN CHECK IF THIS POSITION --
+				// INTERSECTS WITH ANY PREVIOUS USE AT ALL -- IF IT DOES NOT
+				// APPEND IT TO THE "WORKING CURVE" CONTAINER
+				else{
+					var intCheck = 0;
+
+					for(var t=0; t<arrayedCurve.length; t++){
+						var curCurveToCheck = arrayedCurve[t];
+
+						var tempIntCheck = checkUseIntersection(newMovedCurve,curCurveToCheck);
+
+						if(curCurveToCheck == newMovedCurve){
+							intCheck+=1
 						}
+
+						if(tempIntCheck===true){
+							intCheck+=1;
+						}
+					}
+
+					if(intCheck===0){
+						workingCurve.push(newMovedCurve);
 					}
 				}
 			}
+		}
+	}
 
-		// NEXT, CHECK FOR ADJACENCY ISSUES - IF ANY VIEW OR DOOR SIDE IS BEING BLOCKED
-		// ALSO CHECK IF THE VIEW SIDE IS FACING THE VIEW POINT
-		// IF THE ABOVE CONDITIONS ARE MET - THEN PICK THE CURVE THAT IS CLOSEST TO
-		// THE APPROPRIATE CENTROID OF THE PATTERN CURVE
+	return workingCurve;
+}
 
-			var minDist = 1000000;
-			var closestCurve;
+function getAppropCurves(use, workingCurves, prevCurve, curCenterPoint){
+	
+	var appropCurves = []; 
 
-			for(var j=1; j < workingCurve.length ; j++){
+	for(var i=1; i<workingCurves.length; i++){
 
-				var curCurve = workingCurve[j];
-				var prevCurve = arrayedCurve[arrayedCurve.length-1];
+		var curCurve = workingCurves[i];
 
-				if(prevCurve === undefined){
-					console.log("TED, too many conflicts are occuring");
-					conflict = true ;
-					break;
-				}
 
-				//FIRST MAKE ALL CHECKS
-				var check = true;
+		if(prevCurve === undefined){
+			conflict = true ;
+			break;
+		}
 
-				// CHECK ADJACENCIES
-				for(var q=0; q<curCurve.length-1; q++){
-					var side1 = [curCurve[q],curCurve[q+1]];
-					var side1Attribute = use.labels[q];
+		//FIRST MAKE ALL CHECKS
+		var check = true;
 
-					for(var w=0; w<prevCurve.length-1; w++){
-						var side2 = [prevCurve[w],prevCurve[w+1]];
-						var side2Attribute = use.labels[w];
+		// CHECK ADJACENCIES
+		for(var q=0; q<curCurve.length-1; q++){
+			var side1 = [curCurve[q],curCurve[q+1]];
+			var side1Attribute = use.labels[q];
 
-						if(side1Attribute === "v" || side1Attribute === "d" || side2Attribute === "v" || side2Attribute === "d"){
-							var adjTest = checkIfAdjacent(side1,side2);
-							if(adjTest === true){
-								check = false;
-							}
-						}
-					}
-				}
+			for(var w=0; w<prevCurve.length-1; w++){
 
-				// CHECK VISIBILITY
-				for(var s=0; s<pattern_lines.length; s++){
-					var curPattern = pattern_lines[s];
-					var curPatternColor = pattern_color[s];
-					if(curPatternColor[0] === "v"){
-						var visible = checkifVisible(use.labels,curCurve,curPattern,curPatternColor);
-					}
-					if (visible === false){
+				var side2 = [prevCurve[w],prevCurve[w+1]];
+				var side2Attribute = use.labels[w];
+
+
+				if(side1Attribute === "v" || side1Attribute === "d" || side2Attribute === "v" || side2Attribute === "d"){
+
+					var adjTest = checkIfAdjacent(side1,side2);
+					if(adjTest === true){
 						check = false;
 					}
 				}
-
-				//NOW PICK THE CURVE CLOSEST TO THE CENTROID
-				if(check === true){
-					var curCentroid = findCentroid(curCurve);
-					var curDist = distance(curCentroid,curCenterPoint);
-					if(curDist<minDist || almostEquals(curDist,minDist)){
-						minDist = curDist;
-						closestCurve = curCurve;
-					}
-				}
 			}
-			//IF THERE IS A PROBLEM WITH THE CLOSEST CURVE IN ANY FASHION,
-			//OR IF THE USE IS TOO FAR AWAY FROM THE PATTERN
-			//END THE PROCEDURE
-			if(closestCurve === undefined || minDist>200){
-				console.log("TED, too many conflicts are occuring");
+		}
+
+		if(check == true){
+			var curCentroid = findCentroid(curCurve);
+			var curDist = distance(curCentroid, curCenterPoint);
+
+			if(curDist < 15){
+				appropCurves.push(curCurve);
+			}			
+		}
+	}
+
+	return appropCurves;
+}
+
+function array(arrayedCurve, curCenterIndex, use, centerPoints, usePoints){
+
+	if(curCenterIndex == centerPoints.length-1){
+		return true;
+	}
+
+	var curCenterPoint = centerPoints[curCenterIndex];
+
+	var workingCurve = getWorkingCurves(arrayedCurve, arrayedCurve[arrayedCurve.length-1], usePoints, curCenterPoint);
+
+	// console.log("past workingCurve");
+	// console.log(workingCurve.length);
+
+	if(workingCurve.length > 0){
+		
+		var appropriateCurves = getAppropCurves(use, workingCurve, arrayedCurve[arrayedCurve.length-1],curCenterPoint);
+
+		// console.log("past appropriateCurves");
+		// console.log(appropriateCurves.length);
+
+		for(var j=0; j<appropriateCurves.length; j++){
+
+			var curCurve = appropriateCurves[j];
+
+			if(curCurve === undefined){
+				console.log("curCurve Undefined");
 				conflict = true;
 				arrayedCurve = [];
 				populatedPattern = [];
@@ -295,12 +315,55 @@ function arrayPattern(use,pattern){
 			}
 
 			else{
-				arrayedCurve.push(closestCurve);
-				lastMovedCurve = closestCurve;
+				arrayedCurve.push(curCurve);
+				var ans = array(arrayedCurve, curCenterIndex+1, use, centerPoints, usePoints);
+				if(ans === true){
+					return true;
+				}
+				else{
+					arrayedCurve.pop();
+				}
 			}
-		}
+		}				
+	}
 
-		return arrayedCurve;
+	return false;
+}
+
+
+function arrayPattern(use,pattern){
+
+	var usePoints = use.scaledPoints;
+
+	var patternCenterPoints = getRelationalPoints(use,pattern);
+
+	centerPoints = patternCenterPoints;
+	// MOVE THE USE TO THE FIRST POINT ON THE CURVE
+	var useCenterPoint = findCentroid(usePoints);
+	var firstCenterPoint = patternCenterPoints[0];
+
+	var lastMovedCurve = moveCurve(useCenterPoint,usePoints,firstCenterPoint);
+
+	// CREATE THE CONTAINER FOR THE FINAL GENERATED PATTERN
+	var arrayedCurve = [];
+	// ADD THE FIRST MOVED USE TO THE CONTAINER
+	arrayedCurve.push(lastMovedCurve);
+
+	//THEN GET ALL THE ITERATIONS OF THE SUBSEQUENT USES -
+	//EACH ITERATION OF THE LOOP REPRESENTS THE OPTIMIZATION OF ONE USE -
+	// NOTICE HOW IT BEGINS AT 1 - AS THE FIRST USE HAS ALREADY BEEN PLACED BEFORE
+	// THIS MAY SEEM ARBITRARY THAT THE FIRST USE IS PLACED WITHOUT OPTIMIZATION -
+	// BUT YESSIOS OUTLINES THIS EXACT METHOD IN THE CISP PAPER
+
+	for(var i=1; i<patternCenterPoints.length; i++){
+		console.log("before array call");
+
+		var ans = array(arrayedCurve, i, use, centerPoints, usePoints);
+		if (ans == true){
+			return arrayedCurve;
+		}
+	}
+	return arrayedCurve;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

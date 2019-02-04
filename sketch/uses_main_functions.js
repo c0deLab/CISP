@@ -58,7 +58,7 @@ function uses_generatePage(){
 		drawSaveButton();
 		highlightCurrentButton();
 		drawNavigationButtons();
-		drawRefreshButton("REFRESH");
+		drawRefreshButton("RESTART");
 
 		if (currentUse.points.length>0){
 			currentUse.findLabelPoints();
