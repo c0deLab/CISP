@@ -25,15 +25,15 @@ function uses_drawOrtho(){
 	var x2 = int(mouseX); //current click x
 	var y2 = int(mouseY); //current click y
 	var curPt = [x2,y2]; //user clicked point
-	var grid = constructGridofPoints(20); // get the grid 2d list
+	var grid = constructGridofPoints(10); // get the grid 2d list
 
 // if a point has already been defined, begin the trig to figure out the orthogonality of the drawing
-	if (currentUse.points.length>0){
+	if (allUses[currentUse].points.length>0){
 
 		var closestDist = 500000; //large starting value for closest distance to initialize
 		var closestPoint = grid[0];
 
-		var previousPt = currentUse.points[currentUse.points.length-1];
+		var previousPt = allUses[currentUse].points[allUses[currentUse].points.length-1];
 		var previousIndex = [0,0];
 
 		//find the location of the last drawn point in the grid
@@ -41,7 +41,6 @@ function uses_drawOrtho(){
 			for(j=0;j<grid.length;j++){
 				var gridPt = grid[i][j];
 				var distance = dist(previousPt[0],previousPt[1],gridPt[0],gridPt[1]);
-
 				if (distance<closestDist){
 					closestDist = distance;
 					closestPoint = gridPt;
@@ -109,8 +108,8 @@ function uses_drawOrtho(){
 
 	}
 
-	currentUse.points.push(finalPoint);
-	currentUse.labelPoints.push([finalPoint[0],finalPoint[1]]);
-	currentUse.labels.push(" ");
+	allUses[currentUse].points.push(finalPoint);
+	allUses[currentUse].labelPoints.push([finalPoint[0],finalPoint[1]]);
+	allUses[currentUse].labels.push(" ");
 
 }

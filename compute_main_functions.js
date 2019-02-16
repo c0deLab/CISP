@@ -28,7 +28,7 @@ function compute_generatePage(){
 
 		else{
 			background(0);
-			backgrounGrid();
+			//backgrounGrid();
 			highlightCurrentButton();
 			drawNavigationButtons();
 			drawGridDots(5);

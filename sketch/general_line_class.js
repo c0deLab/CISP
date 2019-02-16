@@ -27,9 +27,13 @@ class Line {
 
 	makePoints(){	//draw the line
 		//draw points
+		push();
+		noStroke();
+		fill(255);
 		for (i=0;i<this.points.length;i++){
-			ellipse(this.points[i][0],this.points[i][1],2,2);
+			ellipse(this.points[i][0],this.points[i][1],5,5);
 		}
+		pop();
 	}
 
 
@@ -41,8 +45,8 @@ class Line {
 			var y2 = this.points[i+1][1];
 			//draw the line
 			push();
+			stroke(175);
 			line(x1,y1,x2,y2);
-			stroke(255);
 			pop();
 		}
 	}

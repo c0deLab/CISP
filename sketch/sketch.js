@@ -1,6 +1,5 @@
 
-var mode = "HOME"; // Starting state of entire system
-
+var mode = "USES"; // Starting state of entire system
 
 var beginButtons = 30; //the starting x value for the top row of buttons
 var endButtons = 450; // the ending x value for the top row of buttons
@@ -44,6 +43,18 @@ function draw() {
 
 
 function keyTyped(){
+	if(key == "1"){
+		mode = "HOME";
+	}
+	else if(key == "2"){
+		mode = "PATTERN";
+	}
+	else if(key == "3"){
+		mode = "USES";
+	}
+	else if(key == "4"){
+		mode = "COMPUTE";
+	}
 	if(mode == "PATTERN"){
 		pattern_keyTyped();
 	}
@@ -56,7 +67,6 @@ function keyTyped(){
 function mousePressed(){
 
 	if (mode == "PATTERN"){
-
 			for (i=0;i<4;i++){
 				var useBeginX = beginButtons+buttonStep*i;
 				var useBeginY = buttonY;

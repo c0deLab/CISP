@@ -2,7 +2,7 @@ function patterns_drawOrtho(){
 	var x2 = int(mouseX); //current click x
 	var y2 = int(mouseY); //current click y
 	var curPt = [x2,y2];
-	var grid = constructGridofPoints(5);
+	var grid = constructGridofPoints(10);
 
 	var closestDist = 500000;
 	var closestPoint = grid[0];
@@ -10,17 +10,17 @@ function patterns_drawOrtho(){
 	//find the location of the last drawn point in the grid
 	for(i=0;i<grid.length;i++){
 		for(j=0;j<grid.length;j++){
-			var gridPt = grid[i][j];
-			var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
+			var gridPtX = grid[i][j][0]+40;
+			var gridPtY = grid[i][j][1]+75;
+			var distance = dist(curPt[0],curPt[1],gridPtX,gridPtY);
 
 			if (distance<closestDist){
 				closestDist = distance;
-				closestPoint = gridPt;
+				closestPoint = [gridPtX, gridPtY];
 			}
 		}
 	}
-	var curLine;
-	pattern_lines[pattern_lines.length-1].points.push(closestPoint);
+	pattern_lines[currentPattern].points.push(closestPoint);
 }
 
 
