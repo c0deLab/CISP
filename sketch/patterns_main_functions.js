@@ -74,6 +74,9 @@ function pattern_keyTyped(){
 		else if(key == "d"){
 			uses_mode = "draw";
 		}
+		if(key == "="){
+			pattern_lines[currentPattern] = new Line;
+		}
 	}
 }
 

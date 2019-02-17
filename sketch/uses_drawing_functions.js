@@ -40,10 +40,10 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 			for(j=0;j<grid.length;j++){
 				var gridPt = grid[i][j];
-				var distance = dist(previousPt[0],previousPt[1],gridPt[0],gridPt[1]);
+				var distance = dist(previousPt[0],previousPt[1],gridPt[0]+40,gridPt[1]+75);
 				if (distance<closestDist){
 					closestDist = distance;
-					closestPoint = gridPt;
+					closestPoint = [gridPt[0]+40, gridPt[1]+75];
 					previousIndex = [i,j];
 				}
 			}
@@ -57,11 +57,11 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 
 			var gridPt = grid[i][previousIndex[1]];
-			var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
+			var distance = dist(curPt[0],curPt[1],gridPt[0]+40,gridPt[1]+75);
 
 			if (distance<closestDist){
 				closestDist = distance;
-				pointX = gridPt;
+				pointX = [gridPt[0]+40, gridPt[1]+75];
 			}
 		}
 
@@ -72,11 +72,11 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 
 			var gridPt = grid[previousIndex[0]][i];
-			var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
+			var distance = dist(curPt[0],curPt[1],gridPt[0]+40,gridPt[1]+75);
 
 			if (distance<closestDist){
 				closestDist = distance;
-				pointY = gridPt;
+				pointY = [gridPt[0]+40, gridPt[1]+75];
 			}
 		}
 
@@ -97,11 +97,11 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 			for(j=0;j<grid.length;j++){
 				var gridPt = grid[i][j];
-				var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
+				var distance = dist(curPt[0],curPt[1],gridPt[0]+40,gridPt[1]+75);
 
 				if (distance<closestDist){
 					closestDist = distance;
-					finalPoint = gridPt;
+					finalPoint = [gridPt[0]+40, gridPt[1]+75];
 				}
 			}
 		}

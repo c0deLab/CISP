@@ -61,6 +61,9 @@ function keyTyped(){
 	else if(mode == "USES"){
 		use_keyTyped();
 	}
+	else if(mode == "COMPUTE"){
+		compute_keyTyped();
+	}
 
 }
 

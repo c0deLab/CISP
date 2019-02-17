@@ -13,17 +13,8 @@ function compute_generatePage(){
 
 		if (conflict == true){
 			push();
-			stroke(250);
-			fill(0);
-			var width = 100;
-			var height = 20;
-			rect(250-width,250-height,width*2,height*2);
-			pop();
-
-			push();
-			stroke(255);
 			fill(255);
-			text("Many Conflicts, Click to Restart", 250-width+10,250+height-20);
+			text("Many Conflicts, Click Restart", 250,250);
 			pop();
 		}
 
@@ -58,14 +49,61 @@ function compute_generatePage(){
 				}
 			}
 		}
-
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 
+function compute_keyTyped(){
+	//  // here the user is allowed to insert multiple symbols into the box
+	if(conflict === true){
+		var width = 100;
+		var height = 20;
+		if(key == "d"){
+			conflict = false;
+		}
+	}
+	else{
+		if(useNumber > 0){
+			if(key == "c"){
+				try{
+					compute_scaleUseCurves();
+					background(0);
+					populatedPattern = [];
 
+					for(var j=0; j<pattern_lines.length; j++){
+
+						var curPatternName = pattern_color[j];
+						var curPattern = pattern_lines[j];
+
+						for(var i=0; i<allUses.length; i++){
+
+							var curUseName = allUsesNames[i];
+							var curUse = allUses[i];
+							if(curUse.points.length < 1){
+								break;
+							}
+							else if(curUseName[1] == curPatternName[1]){
+								var curPopulatedPattern = arrayPattern(curUse,curPattern);
+								if(curPopulatedPattern == null){
+									conflict = true;
+								}
+								else{
+									populatedPattern.push(curPopulatedPattern);
+								}
+							}
+						}
+					}
+				}
+				//IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
+				catch{
+					conflict = true;
+				}
+			}	
+		}
+	}	
+}
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// CONTROLLER ////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,10 +141,9 @@ function compute_MousedPressed(){
 										if(curUse.points.length < 1){
 											break;
 										}
-										else if(curUseName == curPatternName){
+										else if(curUseName[1] == curPatternName[1]){
 											var curPopulatedPattern = arrayPattern(curUse,curPattern);
 											if(curPopulatedPattern == null){
-												console.log("woops");
 												conflict = true;
 											}
 											else{
