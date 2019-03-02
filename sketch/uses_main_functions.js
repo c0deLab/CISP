@@ -19,7 +19,7 @@ function uses_generatePage(){
 	push();
 	stroke(255);
 	drawNavigationButtons();
-	drawGridDots(10);
+	drawGridDots(50);
 	drawNavigationButtons();
 	pop();
 	
@@ -40,7 +40,8 @@ function uses_generatePage(){
 			fill(150);
 		}
 		var useName = allUsesNames[i];
-		text(useName,50,85+(i*20));
+		textSize(30);
+		text(useName,100,275+(i*50));
 	}
 	pop();
 
@@ -107,7 +108,7 @@ function uses_MousedPressed(){
 
 	// MAIN INTERACTION - WHERE USER DRAWS THE GEOMETRY
 
-	if (mouseX>40 && mouseY>75 && mouseX<390 && mouseY<450){
+	if (mouseX>100 && mouseY>250 & mouseX<1100 && mouseY<1125){
 	// until the use is closed, the user is not allowed to label any of the sides
 		if (allUses[currentUse].isClosed() == false){
 			uses_drawOrtho();
@@ -118,7 +119,7 @@ function uses_MousedPressed(){
 		else{
 			for(var i=0;i<allUses[currentUse].labelPoints.length;i++){
 				var use_cPoint = allUses[currentUse].labelPoints[i];
-				if(mouseX>use_cPoint[0]-20 && mouseY>use_cPoint[1]-20 && mouseX<use_cPoint[0]+20 && mouseY<use_cPoint[1]+20){
+				if(mouseX>use_cPoint[0]-50 && mouseY>use_cPoint[1]-50 && mouseX<use_cPoint[0]+50 && mouseY<use_cPoint[1]+50){
 					currentUsePointIndex = i;
 					allUses[currentUse].labels[i] = "";
 				}

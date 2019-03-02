@@ -10,7 +10,7 @@ var patternNumber = 0;
 function patterns_generatePage(){
 	
 	background(0);
-	drawGridDots(10);
+	drawGridDots(25);
 	drawNavigationButtons();
 
 	if(reachedPattern == false){
@@ -30,7 +30,8 @@ function patterns_generatePage(){
 			fill(150);
 		}
 		var patternName = pattern_color[i];
-		text(patternName,50,85+(i*20));
+		textSize(30);
+		text(patternName,100,275+(i*50));
 	}
 	pop();
 
@@ -41,6 +42,7 @@ function patterns_generatePage(){
 			if(z == currentPattern){
 				push();
 				fill(255);
+				textSize(30);
 				text(pattern_color[z],pattern_lines[z].points[0][0],pattern_lines[z].points[0][1]+15);
 				pop();
 			}
@@ -82,51 +84,9 @@ function pattern_keyTyped(){
 
 function patterns_mousedPressed(){
 
-	// if (pattern_mode === "define"){
-
-	// 	if(mouseX>beginButtons && mouseY>endButtons && mouseX<beginButtons+buttonWidth && mouseY<endButtons+buttonHeight){
-	// 		pattern_mode = "decide";
-	// 	}
-
-	// 	else{
-
-	// 		for(q=0;q<pattern_lines.length;q++){
-	// 			var cLine = pattern_lines[q];
-	// 			var cPoint = cLine.points[0];
-
-	// 			if(mouseX>cPoint[0]-20 && mouseY>cPoint[1]-20 && mouseX<cPoint[0]+20 && mouseY<cPoint[1]+20){
-	// 				lineToChangeIndex = q;
-	// 				pattern_color[lineToChangeIndex] = "";
-	// 			}
-
-	// 		}
-	// 	}
-
-	// }
-
-	if (mouseX>40 && mouseY>75 && mouseX<410 && mouseY<425 ){
+	if (mouseX>100 && mouseY>250 && mouseX<1100 && mouseY<1250 ){
 		patterns_drawOrtho();
 	}
 
-
-
-	// else{
-	// 	lineToChangeIndex = "null";
-
-	// 	var drawButtonX = 170;
-	// 	var drawButtonY = 200;
-	// 	if (mouseX>drawButtonX && mouseY>drawButtonY && mouseX<drawButtonX+150 && mouseY<drawButtonY+20 ){
-	// 		background(0);
-	// 		pattern_mode = "draw";
-
-	// 	}
-
-	// 	else if (mouseX>drawButtonX && mouseY>drawButtonY+50 && mouseX<drawButtonX+150 && mouseY<drawButtonY+20+50 ){
-	// 		background(0);
-	// 		pattern_mode = "define";
-
-	// 	}
-
-	// }
 
 }

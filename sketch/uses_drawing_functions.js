@@ -25,7 +25,7 @@ function uses_drawOrtho(){
 	var x2 = int(mouseX); //current click x
 	var y2 = int(mouseY); //current click y
 	var curPt = [x2,y2]; //user clicked point
-	var grid = constructGridofPoints(10); // get the grid 2d list
+	var grid = constructGridofPoints(50); // get the grid 2d list
 
 // if a point has already been defined, begin the trig to figure out the orthogonality of the drawing
 	if (allUses[currentUse].points.length>0){
@@ -40,10 +40,10 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 			for(j=0;j<grid.length;j++){
 				var gridPt = grid[i][j];
-				var distance = dist(previousPt[0],previousPt[1],gridPt[0]+40,gridPt[1]+75);
+				var distance = dist(previousPt[0],previousPt[1],gridPt[0],gridPt[1]);
 				if (distance<closestDist){
 					closestDist = distance;
-					closestPoint = [gridPt[0]+40, gridPt[1]+75];
+					closestPoint = [gridPt[0], gridPt[1]];
 					previousIndex = [i,j];
 				}
 			}
@@ -57,11 +57,11 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 
 			var gridPt = grid[i][previousIndex[1]];
-			var distance = dist(curPt[0],curPt[1],gridPt[0]+40,gridPt[1]+75);
+			var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
 
 			if (distance<closestDist){
 				closestDist = distance;
-				pointX = [gridPt[0]+40, gridPt[1]+75];
+				pointX = [gridPt[0], gridPt[1]];
 			}
 		}
 
@@ -72,11 +72,11 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 
 			var gridPt = grid[previousIndex[0]][i];
-			var distance = dist(curPt[0],curPt[1],gridPt[0]+40,gridPt[1]+75);
+			var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
 
 			if (distance<closestDist){
 				closestDist = distance;
-				pointY = [gridPt[0]+40, gridPt[1]+75];
+				pointY = [gridPt[0], gridPt[1]];
 			}
 		}
 
@@ -97,11 +97,11 @@ function uses_drawOrtho(){
 		for(i=0;i<grid.length;i++){
 			for(j=0;j<grid.length;j++){
 				var gridPt = grid[i][j];
-				var distance = dist(curPt[0],curPt[1],gridPt[0]+40,gridPt[1]+75);
+				var distance = dist(curPt[0],curPt[1],gridPt[0],gridPt[1]);
 
 				if (distance<closestDist){
 					closestDist = distance;
-					finalPoint = [gridPt[0]+40, gridPt[1]+75];
+					finalPoint = [gridPt[0], gridPt[1]];
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 
-var mode = "USES"; // Starting state of entire system
+var mode = "HOME"; // Starting state of entire system
 
 var beginButtons = 30; //the starting x value for the top row of buttons
 var endButtons = 450; // the ending x value for the top row of buttons
@@ -12,7 +12,7 @@ var buttonTextSize = 10; // text height in px
 ////////////////////////////////////// VIEW //////////////////////////////////////////////////////////////
 
 function setup() {
-  createCanvas(500,500);
+  createCanvas(1500,1500);
   background(0);
 }
 
@@ -70,105 +70,10 @@ function keyTyped(){
 function mousePressed(){
 
 	if (mode == "PATTERN"){
-			for (i=0;i<4;i++){
-				var useBeginX = beginButtons+buttonStep*i;
-				var useBeginY = buttonY;
-
-				if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==1){
-					mode = "PATTERN";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==0){
-					mode = "HOME";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==2){
-					mode = "USES";
-				}
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==3){
-					mode = "COMPUTE";
-				}
-			}
 		patterns_mousedPressed();
-
-		}
-	else if (mode=="USES")
-		{
-
-			for (i=0;i<4;i++){
-				var useBeginX = beginButtons+buttonStep*i;
-				var useBeginY = buttonY;
-
-				if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==1){
-					mode = "PATTERN";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==0){
-					mode = "HOME";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==2){
-					mode = "USES";
-				}
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==3){
-					mode = "COMPUTE";
-				}
-
-			}
-
+	}
+	else if (mode=="USES"){
 		uses_MousedPressed();
-
-		}
-
-	else if (mode=="HOME")
-	{
-			for (i=0;i<4;i++){
-				var useBeginX = beginButtons+buttonStep*i;
-				var useBeginY = buttonY;
-
-				if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==1){
-					mode = "PATTERN";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==0){
-					mode = "HOME";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==2){
-					mode = "USES";
-				}
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==3){
-					mode = "COMPUTE";
-				}
-			}
-
-	home_MousedPressed();
 	}
-
-	else if (mode=="COMPUTE")
-	{
-			for (i=0;i<4;i++){
-				var useBeginX = beginButtons+buttonStep*i;
-				var useBeginY = buttonY;
-
-				if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==1){
-					mode = "PATTERN";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==0){
-					mode = "HOME";
-				}
-
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==2){
-					mode = "USES";
-				}
-				else if (mouseX>useBeginX && mouseY>useBeginY && mouseX<useBeginX+buttonWidth && mouseY<useBeginY+buttonHeight && i==3){
-					mode = "COMPUTE";
-				}
-			}
-
-	compute_MousedPressed();
-	}
-
 
 }

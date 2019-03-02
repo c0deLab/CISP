@@ -14,32 +14,23 @@ function compute_generatePage(){
 		if (conflict == true){
 			push();
 			fill(255);
-			text("Many Conflicts, Click Restart", 250,250);
+			textSize(50);
+			text("Many Conflicts, Please Reduce Constraints", 400,500);
 			pop();
 		}
 
 		else{
 			background(0);
-			//backgrounGrid();
-			highlightCurrentButton();
 			drawNavigationButtons();
-			drawGridDots(10);
-			drawComputeButton();
-			drawRefreshButton("RESTART");
+			drawGridDots(25);
 
-			for(var i=0;i<pattern_lines.length;i++){
-				push();
-				stroke(150);
-				pattern_lines[i].makeLines();
-				pop();
-			}
+			
 
 			for(var i=0;i<populatedPattern.length;i++){
 				var curPopulation = populatedPattern[i];
 				for(var f=0;f<curPopulation.length;f++){
 					var cUse = curPopulation[f];
 					var center = findCentroid(cUse);
-					// ellipse(center[0],center[1],2,2);
 					for(j=0;j<cUse.length-1;j++){
 						push();
 						stroke(255);
@@ -47,6 +38,12 @@ function compute_generatePage(){
 						pop();
 					}
 				}
+			}
+
+			for(var i=0;i<pattern_lines.length;i++){
+				push();
+				pattern_lines[i].makeLines();
+				pop();
 			}
 		}
 }
@@ -69,23 +66,25 @@ function compute_keyTyped(){
 			if(key == "c"){
 				try{
 					compute_scaleUseCurves();
+					//console.log("here");
 					background(0);
 					populatedPattern = [];
-
 					for(var j=0; j<pattern_lines.length; j++){
-
 						var curPatternName = pattern_color[j];
 						var curPattern = pattern_lines[j];
-
 						for(var i=0; i<allUses.length; i++){
-
 							var curUseName = allUsesNames[i];
 							var curUse = allUses[i];
 							if(curUse.points.length < 1){
+								//console.log("here");
 								break;
 							}
 							else if(curUseName[1] == curPatternName[1]){
+								//console.log("here");
+								//console.log(curUse, curPattern);
 								var curPopulatedPattern = arrayPattern(curUse,curPattern);
+								//console.log("here");
+								//console.log(curPopulatedPattern);
 								if(curPopulatedPattern == null){
 									conflict = true;
 								}
@@ -104,74 +103,6 @@ function compute_keyTyped(){
 		}
 	}	
 }
-///////////////////////////////////////////////////////////////////////////////
-/////////////////////////// CONTROLLER ////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-function compute_MousedPressed(){
-	//IF USER CLICKS "SOLUTION" BUTTON - PUT INTO MOTION THE COMPUTATIONS NEEDED
-	//TO GENERATE THE SOLUTION  ----------- THIS IS THE MAIN PART OF THE ENTIRE PROGRAM
-	//THIS IS WHERE ALL THE MAIN CALLS ARE GENERATED.
-
-				if(conflict === true){
-					var width = 100;
-					var height = 20;
-					if(mouseX>250-width && mouseY>250-height && mouseX<250+width*2 && mouseY<250+height*2){
-						conflict = false;
-					}
-				}
-
-				else{
-					if(mouseX>beginButtons && mouseY>endButtons && mouseX<beginButtons+buttonWidth && mouseY<endButtons+buttonHeight){
-							try{
-								compute_scaleUseCurves();
-								background(0);
-								populatedPattern = [];
-
-								for(var j=0; j<pattern_lines.length; j++){
-
-									var curPatternName = pattern_color[j];
-									var curPattern = pattern_lines[j];
-
-									for(var i=0; i<allUses.length; i++){
-
-										var curUseName = allUsesNames[i];
-										var curUse = allUses[i];
-
-										if(curUse.points.length < 1){
-											break;
-										}
-										else if(curUseName[1] == curPatternName[1]){
-											var curPopulatedPattern = arrayPattern(curUse,curPattern);
-											if(curPopulatedPattern == null){
-												conflict = true;
-											}
-											else{
-												populatedPattern.push(curPopulatedPattern);
-											}
-										}
-									}
-								}
-							}
-							//IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
-							catch{
-								conflict = true;
-							}
-					}
-					// IF THE USER CHOSES TO DELETE ALL PREVIOUS DATA - SET EVERYTHING BACK TO NULL
-					else if(mouseX>beginButtons+350 && mouseY>endButtons && mouseX<beginButtons+350+100 && mouseY<endButtons+30){
-						populatedPattern = [];
-						allUses = [];
-						pattern_color = [];
-						pattern_lines = [];
-						allUsesNames = [];
-						pattern_displayPoints = [];
-						useNumber = 0;
-					}
-				}
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// ALGORITHM ////////////////////////////////////////
@@ -181,7 +112,6 @@ function compute_MousedPressed(){
 // BUT IF YOU WORK THROUGH IT IN A SYSTEMATIC MANNER - IT IS NOT SO DIFFICULT TO
 // COMPREHEND - IT'S ESSENTIALLY A MASSIVE NESTED FOR LOOP WITH A BUNCH OF
 //CHECKS IN THE MIDDLE AND END (CHECKS FOR INTERSECTIONS AND ADJACENCIES)
-
 
 function swap(a, i, j){
 	var a1 = a[i];
@@ -249,7 +179,8 @@ function getWorkingCurves(arrayedCurve, prevUse, usePoints, patternCenterPoint){
 
 //Checks the uses for curves that meet the parameters
 function getAppropCurves(use, workingCurves, prevCurve, curCenterPoint){
-	var appropCurves = []; 
+	var appropCurves = [];
+
 	for(var i=1; i<workingCurves.length; i++){
 		var curCurve = workingCurves[i];
 		if(prevCurve === undefined){
@@ -265,7 +196,7 @@ function getAppropCurves(use, workingCurves, prevCurve, curCenterPoint){
 			for(var w=0; w<prevCurve.length-1; w++){
 				var side2 = [prevCurve[w], prevCurve[w+1]];
 				var side2Attribute = use.labels[w];
-				if(side1Attribute === "v" || side1Attribute === "d"){
+				if(side1Attribute === "v" || side2Attribute === "v"){
 					var adjTest = checkIfAdjacent(side1,side2);
 					if(adjTest == true){
 						check = false;
@@ -277,7 +208,7 @@ function getAppropCurves(use, workingCurves, prevCurve, curCenterPoint){
 		if(check == true){
 			var curCentroid = findCentroid(curCurve);
 			var curDist = distance(curCentroid, curCenterPoint);
-			if(curDist < 50){
+			if(curDist < 150){
 				appropCurves.push(curCurve);
 			}			
 		}
@@ -304,12 +235,16 @@ function array(arrayedCurve, curCenterIndex, use, centerPoints, usePoints,depth)
 	}
 	var curCenterPoint = centerPoints[curCenterIndex];
 	var workingCurve = getWorkingCurves(arrayedCurve, arrayedCurve[curCenterIndex-1], usePoints, curCenterPoint);
-	if(workingCurve.length > 0 && workingCurve != undefined){
+	if(workingCurve != undefined && workingCurve.length > 0){
+		//console.log("here");
+		//console.log(workingCurve);
 		var appropriateCurves = getAppropCurves(use, workingCurve, arrayedCurve[curCenterIndex-1],curCenterPoint);
+		//console.log("here");
+		//console.log(appropriateCurves);
 		for(var j=0; j<appropriateCurves.length; j++){
 			var curCurve = appropriateCurves[j];
 			if(curCurve === undefined){
-				console.log("curCurve Undefined");
+				//console.log("curCurve Undefined");
 				conflict = true;
 				arrayedCurve = [];
 				populatedPattern = [];
@@ -332,29 +267,19 @@ function array(arrayedCurve, curCenterIndex, use, centerPoints, usePoints,depth)
 
 
 function arrayPattern(use,pattern){
-
 	var usePoints = use.scaledPoints;
-
-	var patternCenterPoints = getRelationalPoints(use,pattern);
-
-	centerPoints = patternCenterPoints;
+	var centerPoints = getRelationalPoints(use,pattern);
 	// MOVE THE USE TO THE FIRST POINT ON THE CURVE
 	var useCenterPoint = findCentroid(usePoints);
-	var firstCenterPoint = patternCenterPoints[0];
-
+	var firstCenterPoint = centerPoints[0];
 	var lastMovedCurve = moveCurve(useCenterPoint,usePoints,firstCenterPoint);
-
 	// CREATE THE CONTAINER FOR THE FINAL GENERATED PATTERN
 	var arrayedCurve = [];
 	// ADD THE FIRST MOVED USE TO THE CONTAINER
 	arrayedCurve.push(lastMovedCurve);
 	
 	var depth = [0];
-	//THEN GET ALL THE ITERATIONS OF THE SUBSEQUENT USES -
-	//EACH ITERATION OF THE LOOP REPRESENTS THE OPTIMIZATION OF ONE USE -
-	// NOTICE HOW IT BEGINS AT 1 - AS THE FIRST USE HAS ALREADY BEEN PLACED BEFORE
-	// THIS MAY SEEM ARBITRARY THAT THE FIRST USE IS PLACED WITHOUT OPTIMIZATION -
-	// BUT YESSIOS OUTLINES THIS EXACT METHOD IN THE CISP PAPER
+
 	var ans = array(arrayedCurve, 1, use, centerPoints, usePoints, depth);
 	if (ans == true){
 		return arrayedCurve;
@@ -516,7 +441,7 @@ function checkIfAdjacent(curve1,curve2){
 }
 var c1 = [[0,0],[10,0]];
 var c2 = [[0,0],[8,0]];
-console.log(checkIfAdjacent(c1,c2));
+//console.log(checkIfAdjacent(c1,c2));
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

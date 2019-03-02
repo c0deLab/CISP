@@ -1,7 +1,6 @@
 function home_generatePage(){
 	push();
 	stroke(255);
-	highlightCurrentButton();
 	drawNavigationButtons();
 	pop();
 
@@ -9,8 +8,9 @@ function home_generatePage(){
 	
 	push();
 	noStroke();
-	fill(150);
-	text(CISPText,50,50,300,400);
+	fill(200);
+	textSize(35);
+	text(CISPText,100,250,1000,1250);
 	pop();
 
 }

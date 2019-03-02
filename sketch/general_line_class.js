@@ -31,7 +31,7 @@ class Line {
 		noStroke();
 		fill(255);
 		for (i=0;i<this.points.length;i++){
-			ellipse(this.points[i][0],this.points[i][1],5,5);
+			ellipse(this.points[i][0],this.points[i][1],10,10);
 		}
 		pop();
 	}
@@ -45,7 +45,7 @@ class Line {
 			var y2 = this.points[i+1][1];
 			//draw the line
 			push();
-			stroke(175);
+			stroke(255);
 			line(x1,y1,x2,y2);
 			pop();
 		}
@@ -85,15 +85,15 @@ class Line {
 			push();
 			stroke(150);
 			fill(0);
-			rect(this.labelPoints[i][0],this.labelPoints[i][1],-15,15);
+			rect(this.labelPoints[i][0],this.labelPoints[i][1],-40,40);
 			pop();
 
 			push();
 			fill(150);
 			stroke(150);
 			fill(150);
-			textSize(10);
-			text(this.labels[i],this.labelPoints[i][0]-10,this.labelPoints[i][1]+10);
+			textSize(40);
+			text(this.labels[i],this.labelPoints[i][0]-30,this.labelPoints[i][1]+30);
 			pop();
 
 		}
