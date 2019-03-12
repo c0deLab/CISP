@@ -46,7 +46,6 @@ function patterns_generatePage(){
 				text(pattern_color[z],pattern_lines[z].points[0][0],pattern_lines[z].points[0][1]+15);
 				pop();
 			}
-			
 		}
 	}
 }
@@ -79,6 +78,9 @@ function pattern_keyTyped(){
 		if(key == "="){
 			pattern_lines[currentPattern] = new Line;
 		}
+	}
+	if(key == "p"){
+		console.log(pattern_lines);
 	}
 }
 

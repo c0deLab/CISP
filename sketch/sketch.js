@@ -23,7 +23,7 @@ cursor(CROSS);
 	if (mode == "PATTERN"){
 		patterns_generatePage();
 	}
-	else if (mode =="USES"){
+	else if (mode == "USES"){
 		background(0);
 		uses_generatePage();
 	}
@@ -35,6 +35,10 @@ cursor(CROSS);
 	else if(mode == "COMPUTE"){
 		background(0);
 		compute_generatePage();
+	}
+	else if(mode == "DEMO"){
+		background(0);
+		demo_generatePage();
 	}
 
 }
@@ -55,6 +59,10 @@ function keyTyped(){
 	else if(key == "4"){
 		mode = "COMPUTE";
 	}
+	else if(key == "5"){
+		mode = "DEMO";
+	}
+	
 	if(mode == "PATTERN"){
 		pattern_keyTyped();
 	}
@@ -64,7 +72,9 @@ function keyTyped(){
 	else if(mode == "COMPUTE"){
 		compute_keyTyped();
 	}
-
+	else if(mode == "DEMO"){
+		demo_keyTyped();
+	}
 }
 
 function mousePressed(){

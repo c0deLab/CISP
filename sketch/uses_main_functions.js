@@ -101,7 +101,11 @@ function use_keyTyped(){
 
 	if(key == "v"){
 		allUses[currentUse].labels[currentUsePointIndex] += key;
-	}		
+	}	
+
+	if(key == "p"){
+		console.log(allUses);
+	}	
 }
 
 function uses_MousedPressed(){

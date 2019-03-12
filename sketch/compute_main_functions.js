@@ -23,9 +23,7 @@ function compute_generatePage(){
 			background(0);
 			drawNavigationButtons();
 			drawGridDots(25);
-
-			
-
+			console.log("here");
 			for(var i=0;i<populatedPattern.length;i++){
 				var curPopulation = populatedPattern[i];
 				for(var f=0;f<curPopulation.length;f++){
@@ -54,6 +52,7 @@ function compute_generatePage(){
 
 function compute_keyTyped(){
 	//  // here the user is allowed to insert multiple symbols into the box
+	console.log("here");
 	if(conflict === true){
 		var width = 100;
 		var height = 20;
@@ -66,7 +65,6 @@ function compute_keyTyped(){
 			if(key == "c"){
 				try{
 					compute_scaleUseCurves();
-					//console.log("here");
 					background(0);
 					populatedPattern = [];
 					for(var j=0; j<pattern_lines.length; j++){
@@ -441,7 +439,6 @@ function checkIfAdjacent(curve1,curve2){
 }
 var c1 = [[0,0],[10,0]];
 var c2 = [[0,0],[8,0]];
-//console.log(checkIfAdjacent(c1,c2));
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
