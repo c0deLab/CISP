@@ -11,39 +11,58 @@ var conflict = false;
 ///////////////////////////////////////////////////////////////////////////////
 function compute_generatePage(){
 
-		if (conflict == true){
+	if (conflict == true){
+		push();
+		fill(255);
+		textSize(50);
+		text("Many Conflicts, Please Click Return", 400,500);
+		pop();
+	}
+
+	else{
+		background(0);
+		drawNavigationButtons();
+
+		for(var i=0;i<populatedPattern.length;i++){
+			compute_drawUses(populatedPattern[i],allUses[i]);
+		}
+
+		for(var i=0;i<pattern_lines.length;i++){
+			var pattern_points = generateExpandedCurve(pattern_lines[i]);
+
+			var pattern_drawing_points = [];
+			for(var j=0; j<pattern_points.length; j+=20){
+				pattern_drawing_points.push(pattern_points[j]);
+			}
+
 			push();
-			fill(255);
-			textSize(50);
-			text("Many Conflicts, Please Reduce Constraints", 400,500);
+			noFill();
+			stroke(255);
+			for(var j=0; j<pattern_drawing_points.length-7; j+=2){
+				var p1 = pattern_drawing_points[j];
+				var p2 = pattern_drawing_points[j+1];
+				line(p1[0],p1[1],p2[0],p2[1]);
+			}
 			pop();
 		}
+	}
+}
 
-		else{
-			background(0);
-			drawNavigationButtons();
-			drawGridDots(25);
-			console.log("here");
-			for(var i=0;i<populatedPattern.length;i++){
-				var curPopulation = populatedPattern[i];
-				for(var f=0;f<curPopulation.length;f++){
-					var cUse = curPopulation[f];
-					var center = findCentroid(cUse);
-					for(j=0;j<cUse.length-1;j++){
-						push();
-						stroke(255);
-						line(cUse[j][0],cUse[j][1],cUse[j+1][0],cUse[j+1][1]);
-						pop();
-					}
-				}
-			}
-
-			for(var i=0;i<pattern_lines.length;i++){
-				push();
-				pattern_lines[i].makeLines();
-				pop();
-			}
+function compute_drawUses(curPopulation, curUse){
+	for(var f=0;f<curPopulation.length;f++){
+		var cUse = curPopulation[f];
+		var newUse = new Line;
+		for(var j=0;j<cUse.length;j++){
+			newUse.points.push(cUse[j]);
 		}
+		for(var i=0; i<curUse.labels.length; i++){
+			newUse.labels.push(curUse.labels[i]);
+		}
+		newUse.findLabelPoints();
+		newUse.makeSmallLabels();
+		newUse.makeSmallPoints();
+		newUse.makeLines();
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,54 +70,50 @@ function compute_generatePage(){
 
 
 function compute_keyTyped(){
-	//  // here the user is allowed to insert multiple symbols into the box
-	console.log("here");
 	if(conflict === true){
 		var width = 100;
 		var height = 20;
-		if(key == "d"){
+		if(key == "r"){
 			conflict = false;
 		}
 	}
-	else{
-		if(useNumber > 0){
-			if(key == "c"){
-				try{
-					compute_scaleUseCurves();
-					background(0);
-					populatedPattern = [];
-					for(var j=0; j<pattern_lines.length; j++){
-						var curPatternName = pattern_color[j];
-						var curPattern = pattern_lines[j];
-						for(var i=0; i<allUses.length; i++){
-							var curUseName = allUsesNames[i];
-							var curUse = allUses[i];
-							if(curUse.points.length < 1){
-								//console.log("here");
-								break;
+	else if(useNumber > 0){
+		if(key == "c"){
+			try{
+				compute_scaleUseCurves();
+				background(0);
+				populatedPattern = [];
+				for(var j=0; j<pattern_lines.length; j++){
+					var curPatternName = pattern_color[j];
+					var curPattern = pattern_lines[j];
+					for(var i=0; i<allUses.length; i++){
+						var curUseName = allUsesNames[i];
+						var curUse = allUses[i];
+						if(curUse.points.length < 1){
+							//console.log("here");
+							break;
+						}
+						else if(curUseName[1] == curPatternName[1]){
+							//console.log("here");
+							//console.log(curUse, curPattern);
+							var curPopulatedPattern = arrayPattern(curUse,curPattern);
+							//console.log("here");
+							//console.log(curPopulatedPattern);
+							if(curPopulatedPattern == null){
+								conflict = true;
 							}
-							else if(curUseName[1] == curPatternName[1]){
-								//console.log("here");
-								//console.log(curUse, curPattern);
-								var curPopulatedPattern = arrayPattern(curUse,curPattern);
-								//console.log("here");
-								//console.log(curPopulatedPattern);
-								if(curPopulatedPattern == null){
-									conflict = true;
-								}
-								else{
-									populatedPattern.push(curPopulatedPattern);
-								}
+							else{
+								populatedPattern.push(curPopulatedPattern);
 							}
 						}
 					}
 				}
-				//IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
-				catch{
-					conflict = true;
-				}
-			}	
-		}
+			}
+			//IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
+			catch{
+				conflict = true;
+			}
+		}	
 	}	
 }
 
@@ -106,30 +121,66 @@ function compute_keyTyped(){
 /////////////////////////// ALGORITHM ////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// THIS IS THE ALGORITHM WHERE EVERYTHING HAPPENS  - IT IS QUITE LARGE AND UNWEILDY
-// BUT IF YOU WORK THROUGH IT IN A SYSTEMATIC MANNER - IT IS NOT SO DIFFICULT TO
-// COMPREHEND - IT'S ESSENTIALLY A MASSIVE NESTED FOR LOOP WITH A BUNCH OF
-//CHECKS IN THE MIDDLE AND END (CHECKS FOR INTERSECTIONS AND ADJACENCIES)
+function arrayPattern(use,pattern){
+	var usePoints = use.scaledPoints;
+	centerPoints = getRelationalPoints(use,pattern);
+	// MOVE THE USE TO THE FIRST POINT ON THE CURVE
+	var useCenterPoint = findCentroid(usePoints);
+	var firstCenterPoint = centerPoints[0];
+	var lastMovedCurve = moveCurve(useCenterPoint,usePoints,firstCenterPoint);
+	// CREATE THE CONTAINER FOR THE FINAL GENERATED PATTERN
+	var arrayedCurve = [];
+	// ADD THE FIRST MOVED USE TO THE CONTAINER
+	arrayedCurve.push(lastMovedCurve);
 
-function swap(a, i, j){
-	var a1 = a[i];
-	var a2 = a[j]; 
-	a[i] = a2;
-	a[j] = a1;
+	var depth = [0];
+
+	var ans = array(arrayedCurve, 1, use, centerPoints, usePoints, depth);
+	if (ans == true){
+		return arrayedCurve;
+	}
+	return null;
 }
 
-function selectionSort(workingCurves, point){
+//This is the backtracking function - takes the empty pattern curve and returns
+//a populated one
+function array(arrayedCurve,curCenterIndex,use,centerPoints,usePoints,depth){
 
-    for (var i=0; i<workingCurves.length; i++){
-        minIndex = i;
-        for(var j=i+1; j<a.length; j++){
+	if(curCenterIndex == centerPoints.length-1){
+		return true;
+	}
 
-            if (a[i] < a[minIndex]){
-                minIndex = i;
-            }
-        }
-        swap(workingCurves, startIndex, minIndex);
-    }
+	depth[0]++;
+	if(depth[0] > 3000){
+		console.log("depth above 3000");
+		return false;
+	}
+	var curCenterPoint = centerPoints[curCenterIndex];
+	var workingCurve = getWorkingCurves(arrayedCurve, arrayedCurve[curCenterIndex-1], usePoints, curCenterPoint);
+	if(workingCurve != undefined && workingCurve.length > 0){
+		var appropriateCurves = getAppropCurves(use, workingCurve, arrayedCurve[curCenterIndex-1],curCenterPoint);
+		for(var j=0; j<appropriateCurves.length; j++){
+			var curCurve = appropriateCurves[j];
+			if(curCurve === undefined){
+				//console.log("curCurve Undefined");
+				conflict = true;
+				arrayedCurve = [];
+				populatedPattern = [];
+				break;
+			}
+			else{
+				arrayedCurve.push(curCurve);
+				var ans = array(arrayedCurve, curCenterIndex+1, use, centerPoints, usePoints,depth);
+				if(ans == true){
+					return true;
+				}
+				else{
+					arrayedCurve.pop();
+				}
+			}
+		}				
+	}
+	return false;
 }
 
 //Returns all the possible positions for the uses that connect with the previously
@@ -194,7 +245,7 @@ function getAppropCurves(use, workingCurves, prevCurve, curCenterPoint){
 			for(var w=0; w<prevCurve.length-1; w++){
 				var side2 = [prevCurve[w], prevCurve[w+1]];
 				var side2Attribute = use.labels[w];
-				if(side1Attribute === "v" || side2Attribute === "v"){
+				if(side1Attribute === "v" || side2Attribute === "v" || side1Attribute === "a" || side2Attribute === "a"){
 					var adjTest = checkIfAdjacent(side1,side2);
 					if(adjTest == true){
 						check = false;
@@ -206,89 +257,13 @@ function getAppropCurves(use, workingCurves, prevCurve, curCenterPoint){
 		if(check == true){
 			var curCentroid = findCentroid(curCurve);
 			var curDist = distance(curCentroid, curCenterPoint);
-			if(curDist < 150){
+			if(curDist < 100){
 				appropCurves.push(curCurve);
 			}			
 		}
 	}
 	return appropCurves;
 }
-
-//This is the backtracking function - takes the empty pattern curve and returns
-//a populated one
-function array(arrayedCurve, curCenterIndex, use, centerPoints, usePoints,depth){
-
-	if(curCenterIndex == centerPoints.length-1){
-		return true;
-	}
-	push();
-	stroke(255);
-	background(0);
-	ellipse(250,250,300,300);
-	pop();
-	depth[0]++;
-	if(depth[0] > 3000){
-		console.log("depth above 3000");
-		return false;
-	}
-	var curCenterPoint = centerPoints[curCenterIndex];
-	var workingCurve = getWorkingCurves(arrayedCurve, arrayedCurve[curCenterIndex-1], usePoints, curCenterPoint);
-	if(workingCurve != undefined && workingCurve.length > 0){
-		//console.log("here");
-		//console.log(workingCurve);
-		var appropriateCurves = getAppropCurves(use, workingCurve, arrayedCurve[curCenterIndex-1],curCenterPoint);
-		//console.log("here");
-		//console.log(appropriateCurves);
-		for(var j=0; j<appropriateCurves.length; j++){
-			var curCurve = appropriateCurves[j];
-			if(curCurve === undefined){
-				//console.log("curCurve Undefined");
-				conflict = true;
-				arrayedCurve = [];
-				populatedPattern = [];
-				break;
-			}
-			else{
-				arrayedCurve.push(curCurve);
-				var ans = array(arrayedCurve, curCenterIndex+1, use, centerPoints, usePoints,depth);
-				if(ans == true){
-					return true;
-				}
-				else{
-					arrayedCurve.pop();
-				}
-			}
-		}				
-	}
-	return false;
-}
-
-
-function arrayPattern(use,pattern){
-	var usePoints = use.scaledPoints;
-	var centerPoints = getRelationalPoints(use,pattern);
-	// MOVE THE USE TO THE FIRST POINT ON THE CURVE
-	var useCenterPoint = findCentroid(usePoints);
-	var firstCenterPoint = centerPoints[0];
-	var lastMovedCurve = moveCurve(useCenterPoint,usePoints,firstCenterPoint);
-	// CREATE THE CONTAINER FOR THE FINAL GENERATED PATTERN
-	var arrayedCurve = [];
-	// ADD THE FIRST MOVED USE TO THE CONTAINER
-	arrayedCurve.push(lastMovedCurve);
-	
-	var depth = [0];
-
-	var ans = array(arrayedCurve, 1, use, centerPoints, usePoints, depth);
-	if (ans == true){
-		return arrayedCurve;
-	}
-	return null;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,12 +412,6 @@ function checkIfAdjacent(curve1,curve2){
 
 	return false;
 }
-var c1 = [[0,0],[10,0]];
-var c2 = [[0,0],[8,0]];
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////

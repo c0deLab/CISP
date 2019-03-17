@@ -1,5 +1,3 @@
-/////////////////////////////// DEFINE LINE CLASS //////////////////////////////////////////////////////////////
-
 class Line {
 
 	constructor(){
@@ -36,7 +34,6 @@ class Line {
 		pop();
 	}
 
-
 	makeLines(){
 		for (i=0;i<this.points.length-1;i++){
 			var x1 = this.points[i][0];
@@ -66,7 +63,6 @@ class Line {
 	}
 
 	//draw the lines and labels by interpolating through the points
-
 	findLabelPoints(){
 		this.labelPoints = [];
 		var finalPoints = [];
@@ -89,14 +85,35 @@ class Line {
 			pop();
 
 			push();
-			fill(150);
-			stroke(150);
+			stroke(0);
 			fill(150);
 			textSize(40);
 			text(this.labels[i],this.labelPoints[i][0]-30,this.labelPoints[i][1]+30);
 			pop();
 
 		}
+	}
+
+	makeSmallLabels(){
+
+		for(i=0;i<this.labelPoints.length;i++){
+			push();
+			fill(255);
+			textSize(20);
+			text(this.labels[i],this.labelPoints[i][0]-15,this.labelPoints[i][1]+15);
+			pop();
+
+		}
+	}
+
+	makeSmallPoints(){
+		push();
+		noStroke();
+		fill(255);
+		for (i=0;i<this.points.length;i++){
+			ellipse(this.points[i][0],this.points[i][1],6,6);
+		}
+		pop();
 	}
 
 	findCentroid(){

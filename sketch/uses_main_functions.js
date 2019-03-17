@@ -7,8 +7,6 @@ var currentUsePointIndex; // record of index of a point on a use that has been c
 var useNumber = 0; // record of total number of uses in memory
 var reached = false;
 
-
-
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// VIEWER /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,16 +59,9 @@ function uses_generatePage(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// CONTROLLER ////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-// WHENEVER THE BOX ON THE LINE IS CLICKED, KEYTPED TRIGGERS
 function use_keyTyped(){
 	//  // here the user is allowed to insert multiple symbols into the box
 
@@ -99,10 +90,6 @@ function use_keyTyped(){
 		}
 	}
 
-	if(key == "v"){
-		allUses[currentUse].labels[currentUsePointIndex] += key;
-	}	
-
 	if(key == "p"){
 		console.log(allUses);
 	}	
@@ -110,7 +97,6 @@ function use_keyTyped(){
 
 function uses_MousedPressed(){
 
-	// MAIN INTERACTION - WHERE USER DRAWS THE GEOMETRY
 
 	if (mouseX>100 && mouseY>250 & mouseX<1100 && mouseY<1125){
 	// until the use is closed, the user is not allowed to label any of the sides
@@ -125,7 +111,15 @@ function uses_MousedPressed(){
 				var use_cPoint = allUses[currentUse].labelPoints[i];
 				if(mouseX>use_cPoint[0]-50 && mouseY>use_cPoint[1]-50 && mouseX<use_cPoint[0]+50 && mouseY<use_cPoint[1]+50){
 					currentUsePointIndex = i;
-					allUses[currentUse].labels[i] = "";
+					if(allUses[currentUse].labels[i] == " "){
+						allUses[currentUse].labels[i] = "v";
+					}
+					else if(allUses[currentUse].labels[i] == "v"){
+						allUses[currentUse].labels[i] = "a";
+					}
+					else if(allUses[currentUse].labels[i] == "a"){
+						allUses[currentUse].labels[i] = " ";
+					}
 				}
 			}
 		}

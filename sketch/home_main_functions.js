@@ -1,4 +1,5 @@
 function home_generatePage(){
+	background(0);
 	push();
 	stroke(255);
 	drawNavigationButtons();
