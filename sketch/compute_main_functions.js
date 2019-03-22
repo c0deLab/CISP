@@ -6,22 +6,36 @@ var centerPoints = [];
 
 var conflict = false;
 
+var loading = false;
+
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// VIEWER /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 function compute_generatePage(){
 
 	if (conflict == true){
+		background(0);
+		drawNavigationButtons();
+
 		push();
 		fill(255);
 		textSize(50);
-		text("Many Conflicts, Please Click Return", 400,500);
+		text("Many Conflicts, Please Click Return", 100,500);
 		pop();
+
+		if(help){		
+		showHelp("Whoops! Looks like a solution cannot be found.\n\nPlease go back and reduce/simplify constraints on your Uses and Patterns and retry.");
+		}
+
 	}
 
 	else{
 		background(0);
 		drawNavigationButtons();
+
+		if(help){		
+		showHelp("Please click on the 'Solve' button to see your solution.\n\nYou may go back and change your Uses and Patterns if you are unhappy with your solution!");
+		}
 
 		for(var i=0;i<populatedPattern.length;i++){
 			compute_drawUses(populatedPattern[i],allUses[i]);
@@ -45,6 +59,11 @@ function compute_generatePage(){
 			}
 			pop();
 		}
+	
+		if(loading){
+			document.getElementById("loading").style.opacity = 1;
+			startLoadingMessage();
+		}
 	}
 }
 
@@ -56,6 +75,9 @@ function compute_drawUses(curPopulation, curUse){
 			newUse.points.push(cUse[j]);
 		}
 		for(var i=0; i<curUse.labels.length; i++){
+			if(curUse.labels[i] == undefined){
+				newUse.labels.push(" ");
+			}
 			newUse.labels.push(curUse.labels[i]);
 		}
 		newUse.findLabelPoints();
@@ -75,13 +97,19 @@ function compute_keyTyped(){
 		var height = 20;
 		if(key == "r"){
 			conflict = false;
+			mode = "USES";
 		}
 	}
 	else if(useNumber > 0){
 		if(key == "c"){
+			document.getElementById("loading").style.opacity = 1;
+			loading = true;
+			compute_generatePage();
+			for(var i=0; i<10; i++){
+				redraw();
+			}
 			try{
 				compute_scaleUseCurves();
-				background(0);
 				populatedPattern = [];
 				for(var j=0; j<pattern_lines.length; j++){
 					var curPatternName = pattern_color[j];
@@ -109,17 +137,34 @@ function compute_keyTyped(){
 					}
 				}
 			}
-			//IF ANY KIND OF EXCEPTION IS THROWN - RESET ALL THE DATA AUTOMATICALLY
 			catch{
 				conflict = true;
 			}
-		}	
+			document.getElementById("loading").style.opacity = 0;
+		}
 	}	
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// ALGORITHM ////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+
+function startLoadingMessage(){
+	push();
+	noFill();
+	stroke(255);
+	strokeWeight(3);
+	rect(600, 500, 160, 50);
+	pop();
+
+	push();
+	noStroke();
+	fill(255);
+	textSize(30);
+	text("Loading", 625, 535);
+	pop();
+}
 
 function arrayPattern(use,pattern){
 	var usePoints = use.scaledPoints;
@@ -134,7 +179,6 @@ function arrayPattern(use,pattern){
 	arrayedCurve.push(lastMovedCurve);
 
 	var depth = [0];
-
 	var ans = array(arrayedCurve, 1, use, centerPoints, usePoints, depth);
 	if (ans == true){
 		return arrayedCurve;
@@ -151,8 +195,8 @@ function array(arrayedCurve,curCenterIndex,use,centerPoints,usePoints,depth){
 	}
 
 	depth[0]++;
-	if(depth[0] > 3000){
-		console.log("depth above 3000");
+	if(depth[0] > 1000){
+		console.log("depth above 1000");
 		return false;
 	}
 	var curCenterPoint = centerPoints[curCenterIndex];

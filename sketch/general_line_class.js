@@ -85,18 +85,36 @@ class Line {
 			pop();
 
 			push();
-			stroke(0);
+			noStroke();
 			fill(150);
 			textSize(40);
 			text(this.labels[i],this.labelPoints[i][0]-30,this.labelPoints[i][1]+30);
 			pop();
+		}
 
+		if(help && this.labelPoints.length>0 && this.isClosed()){
+			push();
+			stroke(255);
+			strokeWeight(3);
+			noFill();
+			line(this.labelPoints[0][0]-20, this.labelPoints[0][1]-10,this.labelPoints[0][0]-100, this.labelPoints[0][1]-80);
+			line(this.labelPoints[0][0]-20, this.labelPoints[0][1]-10,this.labelPoints[0][0]-20, this.labelPoints[0][1]-40);
+			line(this.labelPoints[0][0]-20, this.labelPoints[0][1]-10,this.labelPoints[0][0]-50, this.labelPoints[0][1]-10);
+			pop();
+
+			push();
+			noStroke();
+			fill(255);
+			textSize(30);
+			text("Click here to define an attribute", this.labelPoints[0][0]-200, this.labelPoints[0][1]-90);
+			pop();
 		}
 	}
 
 	makeSmallLabels(){
 
 		for(i=0;i<this.labelPoints.length;i++){
+			if(this.labels[i] == undefined) continue;
 			push();
 			fill(255);
 			textSize(20);

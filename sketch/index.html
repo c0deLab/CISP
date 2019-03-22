@@ -2,8 +2,8 @@
 <html>
   <head>
     <style>
-              html, body {
-            height: 100%;
+          html, body {
+          height: 100%;
           }
 
           body {
@@ -16,6 +16,14 @@
 
             /* This centers our sketch vertically. */
             align-items: center;
+          }
+          .loading{
+            position: absolute;
+            left: 100;
+            top: 100;
+            color: white;
+            font-size: 40pt;
+            opacity: 0;
           }
     </style>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
@@ -44,5 +52,6 @@
     
   </head>
   <body>
+    <p class ="loading" id="loading"> Loading...</p>
   </body>
 </html>

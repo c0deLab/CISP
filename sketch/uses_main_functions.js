@@ -20,6 +20,10 @@ function uses_generatePage(){
 	drawGridDots(50);
 	drawNavigationButtons();
 	pop();
+
+	if(help){		
+		showHelp("Here, you will define the outlines of your housing units.\n\nYou may add a new curve by clicking the 'New' button, and toggle between curves with the 'Up' and 'Down' buttons.\n\nNote: The suffix after 'U' links the unit to the pattern you drew before.\n\nOnce you've drawn your unit, you may click on the box next to each wall to define an attribute - 'a' stands for access and 'v' stands for view.\n\nNote: The units must be closed before you can click on a box.\n\nOnce you are done, Click on the 'Compute' button to move to the next step.");
+	}
 	
 	if(reached == false){
 		allUses.push(new Line);
@@ -109,7 +113,7 @@ function uses_MousedPressed(){
 		else{
 			for(var i=0;i<allUses[currentUse].labelPoints.length;i++){
 				var use_cPoint = allUses[currentUse].labelPoints[i];
-				if(mouseX>use_cPoint[0]-50 && mouseY>use_cPoint[1]-50 && mouseX<use_cPoint[0]+50 && mouseY<use_cPoint[1]+50){
+				if(mouseX>use_cPoint[0]-30 && mouseY>use_cPoint[1]-30 && mouseX<use_cPoint[0]+30 && mouseY<use_cPoint[1]+30){
 					currentUsePointIndex = i;
 					if(allUses[currentUse].labels[i] == " "){
 						allUses[currentUse].labels[i] = "v";
@@ -118,6 +122,9 @@ function uses_MousedPressed(){
 						allUses[currentUse].labels[i] = "a";
 					}
 					else if(allUses[currentUse].labels[i] == "a"){
+						allUses[currentUse].labels[i] = " ";
+					}
+					else{
 						allUses[currentUse].labels[i] = " ";
 					}
 				}

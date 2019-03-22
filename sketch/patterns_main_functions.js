@@ -13,6 +13,10 @@ function patterns_generatePage(){
 	drawGridDots(25);
 	drawNavigationButtons();
 
+	if(help){		
+		showHelp("Here, you will define the curves on which your housing units will sit.\n\nBegin by using the pen to draw a curve within the Grid. You may add a new curve by clicking the 'New' button, and toggle between curves with the 'Up' and 'Down' buttons.\n\nIf you wish to delete a curve, please click the 'Delete' button.\n\nOnce you are done defining your curves, please move on by clicking the 'Uses' button.");
+	}
+
 	if(reachedPattern == false){
 		pattern_lines.push(new Line);
 		pattern_color.push("P1");

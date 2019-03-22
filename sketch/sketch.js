@@ -1,5 +1,6 @@
 
 var mode = "HOME"; // Starting state of entire system
+var help = true;
 
 var beginButtons = 30; //the starting x value for the top row of buttons
 var endButtons = 450; // the ending x value for the top row of buttons
@@ -8,6 +9,7 @@ var buttonStep = 120; // distance between buttons
 var buttonWidth = 80; // width of each button
 var buttonHeight = 20; // height of each button
 var buttonTextSize = 10; // text height in px
+
 
 ////////////////////////////////////// VIEW //////////////////////////////////////////////////////////////
 
@@ -60,7 +62,7 @@ function keyTyped(){
 		mode = "COMPUTE";
 	}
 	else if(key == "5"){
-		mode = "DEMO";
+		help = !help;
 	}
 	
 	if(mode == "PATTERN"){
