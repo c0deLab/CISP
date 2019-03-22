@@ -20,7 +20,7 @@ function compute_generatePage(){
 		push();
 		fill(255);
 		textSize(50);
-		text("Many Conflicts, Please Click Return", 100,500);
+		text("Many Conflicts, Please Click Return", 100, 500);
 		pop();
 
 		if(help){		
@@ -36,33 +36,36 @@ function compute_generatePage(){
 		if(help){		
 		showHelp("Please click on the 'Solve' button to see your solution.\n\nYou may go back and change your Uses and Patterns if you are unhappy with your solution!");
 		}
-
-		for(var i=0;i<populatedPattern.length;i++){
-			compute_drawUses(populatedPattern[i],allUses[i]);
-		}
-
-		for(var i=0;i<pattern_lines.length;i++){
-			var pattern_points = generateExpandedCurve(pattern_lines[i]);
-
-			var pattern_drawing_points = [];
-			for(var j=0; j<pattern_points.length; j+=20){
-				pattern_drawing_points.push(pattern_points[j]);
-			}
-
+		if(loading){
 			push();
-			noFill();
-			stroke(255);
-			for(var j=0; j<pattern_drawing_points.length-7; j+=2){
-				var p1 = pattern_drawing_points[j];
-				var p2 = pattern_drawing_points[j+1];
-				line(p1[0],p1[1],p2[0],p2[1]);
-			}
+			fill(255);
+			textSize(50);
+			text("Computing...", 100, 500);
 			pop();
 		}
-	
-		if(loading){
-			document.getElementById("loading").style.opacity = 1;
-			startLoadingMessage();
+		else{
+			for(var i=0;i<populatedPattern.length;i++){
+			compute_drawUses(populatedPattern[i],allUses[i]);
+			}
+
+			for(var i=0;i<pattern_lines.length;i++){
+				var pattern_points = generateExpandedCurve(pattern_lines[i]);
+
+				var pattern_drawing_points = [];
+				for(var j=0; j<pattern_points.length; j+=20){
+					pattern_drawing_points.push(pattern_points[j]);
+				}
+
+				push();
+				noFill();
+				stroke(255);
+				for(var j=0; j<pattern_drawing_points.length-7; j+=2){
+					var p1 = pattern_drawing_points[j];
+					var p2 = pattern_drawing_points[j+1];
+					line(p1[0],p1[1],p2[0],p2[1]);
+				}
+				pop();
+			}
 		}
 	}
 }
@@ -86,9 +89,44 @@ function compute_drawUses(curPopulation, curUse){
 		newUse.makeLines();
 	}
 }
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+
+
+function execute_computation(){
+	try{
+		compute_scaleUseCurves();
+		populatedPattern = [];
+		for(var j=0; j<pattern_lines.length; j++){
+			var curPatternName = pattern_color[j];
+			var curPattern = pattern_lines[j];
+			for(var i=0; i<allUses.length; i++){
+				var curUseName = allUsesNames[i];
+				var curUse = allUses[i];
+				if(curUse.points.length < 1){
+					//console.log("here");
+					break;
+				}
+				else if(curUseName[1] == curPatternName[1]){
+					var curPopulatedPattern = arrayPattern(curUse,curPattern);
+					if(curPopulatedPattern == null){
+						conflict = true;
+					}
+					else{
+						populatedPattern.push(curPopulatedPattern);
+					}
+				}
+			}
+		}
+	}
+	catch{
+		conflict = true;
+	}
+	loading = false;
+}
 
 
 function compute_keyTyped(){
@@ -102,45 +140,12 @@ function compute_keyTyped(){
 	}
 	else if(useNumber > 0){
 		if(key == "c"){
-			document.getElementById("loading").style.opacity = 1;
 			loading = true;
 			compute_generatePage();
 			for(var i=0; i<10; i++){
 				redraw();
 			}
-			try{
-				compute_scaleUseCurves();
-				populatedPattern = [];
-				for(var j=0; j<pattern_lines.length; j++){
-					var curPatternName = pattern_color[j];
-					var curPattern = pattern_lines[j];
-					for(var i=0; i<allUses.length; i++){
-						var curUseName = allUsesNames[i];
-						var curUse = allUses[i];
-						if(curUse.points.length < 1){
-							//console.log("here");
-							break;
-						}
-						else if(curUseName[1] == curPatternName[1]){
-							//console.log("here");
-							//console.log(curUse, curPattern);
-							var curPopulatedPattern = arrayPattern(curUse,curPattern);
-							//console.log("here");
-							//console.log(curPopulatedPattern);
-							if(curPopulatedPattern == null){
-								conflict = true;
-							}
-							else{
-								populatedPattern.push(curPopulatedPattern);
-							}
-						}
-					}
-				}
-			}
-			catch{
-				conflict = true;
-			}
-			document.getElementById("loading").style.opacity = 0;
+			setTimeout(execute_computation, 40);	
 		}
 	}	
 }
@@ -195,8 +200,8 @@ function array(arrayedCurve,curCenterIndex,use,centerPoints,usePoints,depth){
 	}
 
 	depth[0]++;
-	if(depth[0] > 1000){
-		console.log("depth above 1000");
+	if(depth[0] > 3000){
+		console.log("depth above 3000");
 		return false;
 	}
 	var curCenterPoint = centerPoints[curCenterIndex];
