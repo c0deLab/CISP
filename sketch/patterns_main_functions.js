@@ -14,7 +14,7 @@ function patterns_generatePage(){
 	drawNavigationButtons();
 
 	if(help){		
-		showHelp("Here, you will define the curves on which your housing units will sit.\n\nBegin by using the pen to draw a curve within the Grid. You may add a new curve by clicking the 'New' button, and toggle between curves with the 'Up' and 'Down' buttons.\n\nIf you wish to delete a curve, please click the 'Delete' button.\n\nOnce you are done defining your curves, please move on by clicking the 'Uses' button.");
+		showHelp("Here, you will define the curves on which your housing units will sit.\n\nBegin by using the pen to draw a curve within the Grid. You may toggle between curves with the 'Up' and 'Down' buttons.\n\nIf you wish to delete a curve, please click the 'Delete' button.\n\nOnce you are done defining your curves, please move on by clicking the 'Uses' button.");
 	}
 
 	if(reachedPattern == false){
@@ -33,7 +33,7 @@ function patterns_generatePage(){
 		else{
 			fill(150);
 		}
-		var patternName = pattern_color[i];
+		var patternName = pattern_color[i][1];
 		textSize(30);
 		text(patternName,100,275+(i*50));
 	}
@@ -60,10 +60,12 @@ function pattern_keyTyped(){
 		pattern_color[lineToChangeIndex] = pattern_color[lineToChangeIndex]+key;
 	}
 	if(key == "n"){
-		pattern_lines.push(new Line);
-		patternNumber++;
-		pattern_color.push("P" + str(patternNumber));
-		currentPattern = patternNumber -1;
+		if(patternNumber<4){
+			pattern_lines.push(new Line);
+			patternNumber++;
+			pattern_color.push("P" + str(patternNumber));
+			currentPattern = patternNumber -1;
+		}
 	}
 	if(patternNumber > 0){
 		if(key == "s"){
