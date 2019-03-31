@@ -20,11 +20,11 @@ function compute_generatePage(){
 		push();
 		fill(255);
 		textSize(50);
-		text("Many Conflicts, Please Click Return", 100, 500);
+		text("CISP could not find a solution.\n\nPlease press 'Return' key.", 100, 500);
 		pop();
 
 		if(help){		
-		showHelp("Whoops! Looks like a solution cannot be found.\n\nPlease go back and reduce/simplify constraints on your Uses and Patterns and retry.");
+		showHelp("Please go back and reduce/simplify constraints on your Uses and Patterns and retry.");
 		}
 
 	}

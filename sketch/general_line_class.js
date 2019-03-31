@@ -106,7 +106,7 @@ class Line {
 			noStroke();
 			fill(255);
 			textSize(30);
-			text("Click here to define an attribute", this.labelPoints[0][0]-200, this.labelPoints[0][1]-90);
+			text("Click any box to define attribute", this.labelPoints[0][0]-200, this.labelPoints[0][1]-90);
 			pop();
 		}
 	}

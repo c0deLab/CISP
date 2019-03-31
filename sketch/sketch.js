@@ -59,6 +59,7 @@ function keyTyped(){
 		mode = "USES";
 	}
 	else if(key == "4"){
+		conflict = false;
 		mode = "COMPUTE";
 	}
 	else if(key == "5"){
