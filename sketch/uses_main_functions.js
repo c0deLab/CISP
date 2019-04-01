@@ -22,7 +22,7 @@ function uses_generatePage(){
 	pop();
 
 	if(help){		
-		showHelp("Here, you will define the outlines of your housing units.\n\nYou may toggle between curves with the 'Up' and 'Down' buttons.\n\nNote: The suffix after 'U' links the unit to the pattern you drew before.\n\nOnce you've drawn your unit, you may click on the box next to each wall to define an attribute - 'a' stands for access and 'v' stands for view.\n\nNote: The units must be closed before you can click on a box.\n\nOnce you are done, Click on the 'Compute' button to move to the next step.");
+		showHelp("Here you can create shapes representing housing units using the stylus.\n\nOnce the shape is closed, you can assign constraints to each segment by clicking on the small boxes. 'v' stands for 'view' and 'a' stands for 'access'.\n\nTo create a new shape, press the 'New' button. Each shape is assigned a number on the left side of the screen. CISP will use the numbers to align shapes and patterns.\n\nTo toggle between different shapes, use the Up and Down buttons.");
 	}
 	
 	if(reached == false){
