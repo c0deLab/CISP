@@ -8,6 +8,8 @@ var conflict = false;
 
 var loading = false;
 
+var photoNum = 0;
+
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// VIEWER /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +147,9 @@ function compute_keyTyped(){
 			for(var i=0; i<10; i++){
 				redraw();
 			}
-			setTimeout(execute_computation, 40);	
+			setTimeout(execute_computation, 40);
+			save(photoNum+"CISP.png");
+			photoNum++;
 		}
 	}	
 }
