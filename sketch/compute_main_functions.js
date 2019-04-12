@@ -10,6 +10,8 @@ var loading = false;
 
 var photoNum = 0;
 
+var success = false;
+
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// VIEWER /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,11 @@ function compute_generatePage(){
 					line(p1[0],p1[1],p2[0],p2[1]);
 				}
 				pop();
+			}
+			if(success){
+				save(photoNum+"CISP.png");
+				photoNum++;
+				success = false;
 			}
 		}
 	}
@@ -148,8 +155,7 @@ function compute_keyTyped(){
 				redraw();
 			}
 			setTimeout(execute_computation, 40);
-			save(photoNum+"CISP.png");
-			photoNum++;
+			success = true;
 		}
 	}	
 }
