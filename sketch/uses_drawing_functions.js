@@ -108,8 +108,28 @@ function uses_drawOrtho(){
 
 	}
 
-	allUses[currentUse].points.push(finalPoint);
-	allUses[currentUse].labelPoints.push([finalPoint[0],finalPoint[1]]);
-	allUses[currentUse].labels.push(" ");
+	var eq = false;
 
+	for(var i=0; i<allUses[currentUse].points.length; i++){
+		var curpt = allUses[currentUse].points[i];
+
+		if(i==0 && allUses[currentUse].points.length > 1){
+			continue;
+		}
+
+		if(almostEqualsPar(finalPoint[0], curpt[0],10) && almostEqualsPar(finalPoint[1], curpt[1],10)){
+			eq = true;
+		}
+	}
+
+	if(eq != true){
+		allUses[currentUse].points.push(finalPoint);
+		allUses[currentUse].labelPoints.push([finalPoint[0],finalPoint[1]]);
+		allUses[currentUse].labels.push(" ");
+	}
 }
+
+function almostEqualsPar(x,y,par){
+	return (Math.abs(x-y)<par);
+}
+

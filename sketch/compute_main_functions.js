@@ -20,7 +20,7 @@ function compute_generatePage(){
 		push();
 		fill(255);
 		textSize(50);
-		text("CISP could not find a solution.\n\nPlease press 'Return' key.", 100, 500);
+		text("CISP could not find a solution.\n\nPlease try to reduce constraints.\n\nAlternatively, simplify pattern curves.", 100, 500);
 		pop();
 
 		if(help){		
