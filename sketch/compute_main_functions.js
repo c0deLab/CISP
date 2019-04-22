@@ -71,72 +71,13 @@ function compute_generatePage(){
 				pop();
 			}
 			if(success){
-				save(photoNum+"CISP.png");
 				photoNum++;
+				save(photoNum+"CISP.png");
 				success = false;
 			}
 		}
 	}
 }
-
-function compute_drawUses(curPopulation, curUse){
-	for(var f=0;f<curPopulation.length;f++){
-		var cUse = curPopulation[f];
-		var newUse = new Line;
-		for(var j=0;j<cUse.length;j++){
-			newUse.points.push(cUse[j]);
-		}
-		for(var i=0; i<curUse.labels.length; i++){
-			if(curUse.labels[i] == undefined){
-				newUse.labels.push(" ");
-			}
-			newUse.labels.push(curUse.labels[i]);
-		}
-		newUse.findLabelPoints();
-		newUse.makeSmallLabels();
-		newUse.makeSmallPoints();
-		newUse.makeLines();
-	}
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-
-function execute_computation(){
-	try{
-		compute_scaleUseCurves();
-		populatedPattern = [];
-		for(var j=0; j<pattern_lines.length; j++){
-			var curPatternName = pattern_color[j];
-			var curPattern = pattern_lines[j];
-			for(var i=0; i<allUses.length; i++){
-				var curUseName = allUsesNames[i];
-				var curUse = allUses[i];
-				if(curUse.points.length < 1){
-					//console.log("here");
-					break;
-				}
-				else if(curUseName[1] == curPatternName[1]){
-					var curPopulatedPattern = arrayPattern(curUse,curPattern);
-					if(curPopulatedPattern == null){
-						conflict = true;
-					}
-					else{
-						populatedPattern.push(curPopulatedPattern);
-					}
-				}
-			}
-		}
-	}
-	catch{
-		conflict = true;
-	}
-	loading = false;
-}
-
 
 function compute_keyTyped(){
 	if(conflict === true){
@@ -160,11 +101,63 @@ function compute_keyTyped(){
 	}	
 }
 
+function compute_drawUses(curPopulation, curUse){
+	for(var f=0;f<curPopulation.length;f++){
+		var cUse = curPopulation[f];
+		var newUse = new Line;
+		for(var j=0;j<cUse.length;j++){
+			newUse.points.push(cUse[j]);
+		}
+		for(var i=0; i<curUse.labels.length; i++){
+			if(curUse.labels[i] == undefined){
+				newUse.labels.push(" ");
+			}
+			newUse.labels.push(curUse.labels[i]);
+		}
+		newUse.findLabelPoints();
+		newUse.makeSmallLabels();
+		newUse.makeSmallPoints();
+		newUse.makeLines();
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+function execute_computation(){
+	try{
+		compute_scaleUseCurves();
+		populatedPattern = [];
+		for(var j=0; j<pattern_lines.length; j++){
+			var curPatternName = pattern_color[j];
+			var curPattern = pattern_lines[j];
+			for(var i=0; i<allUses.length; i++){
+				var curUseName = allUsesNames[i];
+				var curUse = allUses[i];
+				if(curUse.points.length < 1){
+					break;
+				}
+				else if(curUseName[1] == curPatternName[1]){
+					var curPopulatedPattern = arrayPattern(curUse,curPattern);
+					if(curPopulatedPattern == null){
+						conflict = true;
+					}
+					else{
+						populatedPattern.push(curPopulatedPattern);
+					}
+				}
+			}
+		}
+	}
+	catch{
+		conflict = true;
+	}
+	loading = false;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////// ALGORITHM ////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
 function startLoadingMessage(){
 	push();
 	noFill();
@@ -472,7 +465,6 @@ function checkIfAdjacent(curve1,curve2){
 	return false;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////// OPERATIVE FUNCTIONS /////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -515,7 +507,6 @@ function getLineVector(line){
 	return [vector,vectorMagnitude,unitVector];
 }
 
-
 function generateExpandedCurve(curve){
 	var allCrvPoints =[];
 	for(var i=0; i<curve.points.length-1;i++){
@@ -534,12 +525,10 @@ function generateExpandedCurve(curve){
 	return allCrvPoints;
 }
 
-
 function getDimension(use){
 	use.findBoundingBox();
 	return use.boundingBox[1];
 }
-
 
 function getRelationalPoints(use,pattern){
 	var dimension = getDimension(use);
@@ -609,7 +598,6 @@ function mirrorCurve(curve,line){
 	}
 	return reflectedCurve;
 }
-
 
 function almostEquals(x,y){
 	return (Math.abs(x-y)<5);
